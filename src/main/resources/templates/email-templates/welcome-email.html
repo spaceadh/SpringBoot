@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Welcome to By ByGraceTrust</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #2596be;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #2596be;
+            color: white;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://cdn-jbekb.nitrocdn.com/widffaTVzJlDviTWrUIJSYswLnATDbLU/assets/images/optimized/rev-d76c51d/poeticjustice.com/wp-content/uploads/2018/08/dvea-white-logo.png" alt="Company Logo"/>
+            <h1>Account Confirmation</h1>
+        </div>
+        <div class="content">
+            <h1>Hello, <span th:text="${firstName}"></span> <span th:text="${lastName}"></span>!</h1>
+            <p>You have been added as an Admin to ByGraceTrust.</p>
+            <p>Your email: <strong th:text="${email}"></strong></p>
+            <p>Your password: <strong th:text="${password}"></strong></p>
+            <p>You will be required to change the password on login.</p>
+            <p>Welcome to By Grace Trust.</p>
+        </div>        
+        <div class="footer">
+            <p>© 2024 Digital Vision EA Limited.</p>
+        </div>
+    </div>
+</body>
+</html>

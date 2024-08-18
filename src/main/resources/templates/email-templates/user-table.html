@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>User Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        .header {
+            text-align: center;
+            background-color: #2596be;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+        }
+        .footer {
+            text-align: center;
+            padding: 10px 0;
+            background-color: #2596be;
+            color: white;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://cdn-jbekb.nitrocdn.com/widffaTVzJlDviTWrUIJSYswLnATDbLU/assets/images/optimized/rev-d76c51d/poeticjustice.com/wp-content/uploads/2018/08/dvea-white-logo.png" alt="Company Logo"/>
+            <h1>User Details</h1>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Phone Number</th>
+                    <th>Role</th>
+                    <th>Avatar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.firstName}"></td>
+                    <td th:text="${user.lastName}"></td>
+                    <td th:text="${user.email}"></td>
+                    <td th:text="${user.phoneNumber}"></td>
+                    <td th:text="${user.role}"></td>
+                    <td>
+                        <img class="avatar" th:src="${user.avatarUrl != null ? user.avatarUrl : 'https://cdn-jbekb.nitrocdn.com/widffaTVzJlDviTWrUIJSYswLnATDbLU/assets/images/optimized/rev-d76c51d/poeticjustice.com/wp-content/uploads/2018/08/dvea-white-logo.png'}" alt="Avatar"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            <p>© 2024 Digital Vision EA Limited.</p>
+        </div>
+    </div>
+</body>
+</html>
