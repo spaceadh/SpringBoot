@@ -272,56 +272,56 @@ public class UserController {
         return UserRespository.findAll();
     }
 
-    @PostMapping("/admin-register")
-    public ResponseEntity<?> registerUser(@RequestBody Map<String, String> body) throws NoSuchAlgorithmException{
-         // Log the request body and token
-        logger.info("Request Body: {}", body);
+    // @PostMapping("/admin-register")
+    // public ResponseEntity<?> registerUser(@RequestBody Map<String, String> body) throws NoSuchAlgorithmException{
+    //      // Log the request body and token
+    //     logger.info("Request Body: {}", body);
 
-        String firstName = body.get("firstName");
-        String lastName = body.get("lastName");
-        String email = body.get("email");
-        //validate email    
-        Pattern p = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
-        Matcher m = p.matcher(email);
-        if(!m.matches()){
-            // throw new InvalidEmailException("Email is not valid");
-            return ResponseEntity.badRequest().body(new ErrorResponse("Validation Error", "Email is not valid"));
-        }
-        String role;
-        role = "Admin";   
-        //check if email is in use
-        List<User> users = UserRespository.findByEmail(email);
-        if(!users.isEmpty()){
-            // throw new EmailAlreadyInUseException("Email is already in use");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Conflict", "Email is already in use"));
-        }
-        String phoneNumber = body.get("phoneNumber");
-        //validate phone
-        p = Pattern.compile("^[0-9]{10}$");
-        m = p.matcher(phoneNumber);
-        if(!m.matches()){
-            // throw new InvalidPhoneNumberException("Phone Number is not valid");
-            return ResponseEntity.badRequest().body(new ErrorResponse("Validation Error", "Phone Number is not valid"));
-        }
-        //check if phone is in use
-        users = UserRespository.findByPhoneNumber(phoneNumber);
-        if(!users.isEmpty()){
-            // throw new PhoneNumberAlreadyInUseException("Phone Number is already in use");
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Conflict", "Phone Number is already in use"));
-        }
-        String password = body.get("password");
-        //validate password
-        p = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
-        m = p.matcher(password);
-        if(!m.matches()){
-            // throw new InvalidPasswordException("Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character");
-            return ResponseEntity.badRequest().body(new ErrorResponse("Validation Error", "Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character"));
-        }
-        User user = new User();
-        // User savedUser = UserRespository.save(user);
-        User savedUser = UserRespository.save(new User(firstName, lastName, email, phoneNumber, password, role));
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
-    }
+    //     String firstName = body.get("firstName");
+    //     String lastName = body.get("lastName");
+    //     String email = body.get("email");
+    //     //validate email    
+    //     Pattern p = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+    //     Matcher m = p.matcher(email);
+    //     if(!m.matches()){
+    //         // throw new InvalidEmailException("Email is not valid");
+    //         return ResponseEntity.badRequest().body(new ErrorResponse(404, "Email is not valid"));
+    //     }
+    //     String role;
+    //     role = "Admin";   
+    //     //check if email is in use
+    //     List<User> users = UserRespository.findByEmail(email);
+    //     if(!users.isEmpty()){
+    //         // throw new EmailAlreadyInUseException("Email is already in use");
+    //         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(404, "Email is already in use"));
+    //     }
+    //     String phoneNumber = body.get("phoneNumber");
+    //     //validate phone
+    //     p = Pattern.compile("^[0-9]{10}$");
+    //     m = p.matcher(phoneNumber);
+    //     if(!m.matches()){
+    //         // throw new InvalidPhoneNumberException("Phone Number is not valid");
+    //         return ResponseEntity.badRequest().body(new ErrorResponse(404, "Phone Number is not valid"));
+    //     }
+    //     //check if phone is in use
+    //     users = UserRespository.findByPhoneNumber(phoneNumber);
+    //     if(!users.isEmpty()){
+    //         // throw new PhoneNumberAlreadyInUseException("Phone Number is already in use");
+    //         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(404, "Phone Number is already in use"));
+    //     }
+    //     String password = body.get("password");
+    //     //validate password
+    //     p = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+    //     m = p.matcher(password);
+    //     if(!m.matches()){
+    //         // throw new InvalidPasswordException("Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character");
+    //         return ResponseEntity.badRequest().body(new ErrorResponse(404, "Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character"));
+    //     }
+    //     User user = new User();
+    //     // User savedUser = UserRespository.save(user);
+    //     User savedUser = UserRespository.save(new User(firstName, lastName, email, phoneNumber, password, role));
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    // }
 
     @PostMapping("/user/create")
     public ResponseEntity<?> createUser(@RequestBody Map<String, String> body, @RequestHeader Map<String, String> headers) {
@@ -384,19 +384,19 @@ public class UserController {
 
         } catch (LacksAuthorizationHeader | UnauthorizedUser | InvalidToken e) {
             logger.error("Authorization error: ", e);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Unauthorized", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(404, e.getMessage()));
         } catch (InvalidEmailException | EmailAlreadyInUseException | InvalidPhoneNumberException | PhoneNumberAlreadyInUseException | InvalidPasswordException e) {
             logger.error("Validation error: ", e);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Validation Error", e.getMessage()));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(404, e.getMessage()));
         } catch (NoSuchAlgorithmException e) {
             logger.error("Error creating user: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal Server Error", "An error occurred"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(404, "An error occurred"));
         } catch (MessagingException e) {
             logger.error("Error sending email: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal Server Error", "An error occurred while sending email"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(404, "An error occurred while sending email"));
         } catch (Exception e) {
             logger.error("Unexpected error: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal Server Error", "An unexpected error occurred"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(404, "An unexpected error occurred"));
         }
     }
 
@@ -440,7 +440,7 @@ public class UserController {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(error -> error.getDefaultMessage())
                     .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(new ErrorResponse("Validation Error", String.join(", ", errors)));
+            return ResponseEntity.badRequest().body(new ErrorResponse(404, String.join(", ", errors)));
         }
 
         String email = loginRequest.getEmail();
@@ -449,7 +449,7 @@ public class UserController {
         // List<User> users = userRepository.findByEmail(email);
 
         if (users.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Unauthorized", "Email is not valid"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(404, "Email is not valid"));
         }
 
         User user = users.get(0);
@@ -461,11 +461,11 @@ public class UserController {
                 UserRespository.save(user);
                 return ResponseEntity.ok(user);
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Unauthorized", "Password is incorrect"));
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse(404, "Password is incorrect"));
             }
         } catch (Exception e) {
             logger.error("Error logging user: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Internal Server Error", "An error occurred"));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(404, "An error occurred"));
         }
     }
    

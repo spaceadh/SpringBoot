@@ -2,20 +2,23 @@ package com.poeticjustice.deeppoemsinc.exceptions;
 
 import com.poeticjustice.deeppoemsinc.models.DonationAppUser;
 
-public class ErrorResponse {
+import lombok.Data;
+
+@Data
+public class SuccessResponse {
 
     private Integer responseCode;
     private String message;
     private DonationAppUser savedUser;
 
-
-    public ErrorResponse(Integer responseCode, String message) {
+    public SuccessResponse(Integer responseCode, String message) {
         this.responseCode = responseCode;
         this.message = message;
     }
 
-    public ErrorResponse(int responseCode, DonationAppUser savedUser) {
+    public SuccessResponse(int responseCode,String message, DonationAppUser savedUser) {
         this.savedUser = savedUser;
+        this.message = message;
         this.responseCode = responseCode;
     }
 
@@ -35,4 +38,12 @@ public class ErrorResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    // public DonationAppUser getSavedUser() {
+    //     return savedUser;
+    // }
+    
+    // public void setSavedUser(DonationAppUser savedUser) {
+    //     this.savedUser = savedUser;
+    // }    
 }

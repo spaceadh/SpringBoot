@@ -1,11 +1,12 @@
 package com.poeticjustice.deeppoemsinc.controllers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,23 +14,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.poeticjustice.deeppoemsinc.models.Book;
+import com.poeticjustice.deeppoemsinc.models.mysql.User;
 import com.poeticjustice.deeppoemsinc.Repository.BookRespository;
 import com.poeticjustice.deeppoemsinc.Repository.mysql.UserRespository;
 import com.poeticjustice.deeppoemsinc.exceptions.InvalidToken;
 import com.poeticjustice.deeppoemsinc.exceptions.LacksAuthorizationHeader;
 import com.poeticjustice.deeppoemsinc.exceptions.UnauthorizedUser;
-import com.poeticjustice.deeppoemsinc.models.Book;
-import com.poeticjustice.deeppoemsinc.models.mysql.User;
 import com.poeticjustice.deeppoemsinc.service.BookService;
 import com.poeticjustice.deeppoemsinc.utils.JwtTokenUtil;
 
 import jakarta.validation.constraints.Email;
 
 @Controller
-// @RequestMapping("/books")
+@RequestMapping("/books")
 public class BookController {
 
     @Autowired
@@ -47,7 +49,7 @@ public class BookController {
 
     User loggedInUser;
 
-   
+    
     private void middleWare(String authorization) {
         try {
             if (authorization == null || authorization.isEmpty()) {
@@ -110,7 +112,7 @@ public class BookController {
         return jwtTokenUtil.validateToken(token, user);
     }
 
-    @PostMapping("/books/create")
+    @PostMapping("/create")
     public ResponseEntity<String> createBook(
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "author", required = false) String author,
@@ -177,7 +179,7 @@ public class BookController {
         }
     }
 
-    @GetMapping("/books/all")
+    @GetMapping("/all")
     public ResponseEntity<List<Book>> getAllBooks() {
         List<Book> books = bookService.getAllBooks();
         return ResponseEntity.ok(books);

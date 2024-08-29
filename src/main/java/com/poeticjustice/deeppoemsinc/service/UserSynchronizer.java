@@ -30,7 +30,7 @@ public class UserSynchronizer {
         this.poemMongoRepository = poemMongoRepository;
     }
 
-    @Scheduled(cron = "0 * * * * ?") // Run every minute
+    // @Scheduled(cron = "0 * * * * ?") // Run every minute
     public void synchronizeUsers() {
         // Fetch users from MySQL
         List<User> mysqlUsers = userRepository.findAll();
