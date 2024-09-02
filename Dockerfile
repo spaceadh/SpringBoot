@@ -23,5 +23,7 @@ COPY --from=build /app/target/deeppoemsinc-0.0.1-SNAPSHOT.jar app.jar
 # Expose the application port
 EXPOSE 7072
 
+# docker login -u spaceadh
+# dckr_pat_np-WrjfARWekaybuQw7RBW572T8
 # Command to run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
