@@ -4,7 +4,7 @@ services:
   app:
     image: deeppoemsinc  # Make sure this is the name of your Docker image
     ports:
-      - "7072:8080"  # Map container port to host port
+      - "7072:7071"  # Map container port to host port
     depends_on:
       - mariadb
       - mongodb
