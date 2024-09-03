@@ -17,7 +17,6 @@ if [ "$(docker ps -q)" ]; then
 
   echo "Removing all stopped Docker containers... Line 18"
   docker stop $(docker ps -q) || { echo "Failed to stop running Docker containers"; exit 1; }
-#   docker rm $(docker ps -a -q) || { echo "Failed to remove Docker containers"; exit 1; }
 else
   echo "No running Docker containers found."
 fi
@@ -32,7 +31,6 @@ fi
 # Check if MongoDB container is running
 if [ "$(docker ps -q -f name=$MONGO_NAME)" ]; then
   echo "Stopping and removing the existing MongoDB container..."
-  # docker stop $MONGO_NAME || { echo "Failed to stop the MongoDB container"; exit 1; }
 else
   echo "No running MongoDB container found."
 fi
