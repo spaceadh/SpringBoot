@@ -14,7 +14,6 @@ pwd
 if [ "$(docker ps -q)" ]; then
   echo "Stopping all running Docker containers..."
   docker-compose down || { echo "Failed to stop running Docker containers"; exit 1; }
-
   echo "Removing all stopped Docker containers... Line 18"
   docker stop $(docker ps -q) || { echo "Failed to stop running Docker containers"; exit 1; }
 else
