@@ -25,5 +25,6 @@ docker-compose up -d || { echo "Failed to start the Docker container"; exit 1; }
 echo "Checking the status of the Docker container..."
 docker ps | grep $SERVICE_NAME && echo "Docker service is running" || { echo "Docker service failed to start"; exit 1; }
 
+
 # Print success message
 echo "Docker build successful and the service is running"
