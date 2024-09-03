@@ -25,7 +25,7 @@ fi
 if [ "$(docker ps -q -f name=$SERVICE_NAME)" ]; then
   echo "Stopping and removing the existing Docker container for $SERVICE_NAME..."
 #   docker-compose down || { echo "Failed to stop and remove the Docker container for $SERVICE_NAME"; exit 1; }
-  docker stop $(docker ps -q) || { echo "Failed to stop and remove the Docker container"; exit 1; }
+#   docker stop $(docker ps -q) || { echo "Failed to stop and remove the Docker container"; exit 1; }
 else
   echo "No running container with name $SERVICE_NAME found."
 fi
@@ -33,7 +33,7 @@ fi
 # Check if MongoDB container is running
 if [ "$(docker ps -q -f name=$MONGO_NAME)" ]; then
   echo "Stopping and removing the existing MongoDB container..."
-  docker stop $MONGO_NAME || { echo "Failed to stop the MongoDB container"; exit 1; }
+#   docker stop $MONGO_NAME || { echo "Failed to stop the MongoDB container"; exit 1; }
 #   docker rm $MONGO_NAME || { echo "Failed to remove the MongoDB container"; exit 1; }
 else
   echo "No running MongoDB container found."
@@ -42,7 +42,7 @@ fi
 # Check if MySQL container is running
 if [ "$(docker ps -q -f name=$MYSQL_NAME)" ]; then
   echo "Stopping and removing the existing MySQL container..."
-  docker stop $MYSQL_NAME || { echo "Failed to stop the MySQL container"; exit 1; }
+#   docker stop $MYSQL_NAME || { echo "Failed to stop the MySQL container"; exit 1; }
 #   docker stop $MySQL || { echo "Failed to stop the MySQL container"; exit 1; }
   # docker rm mariadb || { echo "Failed to remove the MySQL container"; exit 1; }
 else
