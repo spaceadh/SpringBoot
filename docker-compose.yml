@@ -4,7 +4,7 @@ services:
   app:
     image: deeppoemsinc
     ports:
-      - "7072:7071"
+      - "7072:7072"
     depends_on:
       - mariadb
       - mongodb
@@ -14,6 +14,8 @@ services:
       SPRING_DATASOURCE_USERNAME: victoralvin
       SPRING_DATASOURCE_PASSWORD: HelloWorld20*
       SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/springboot
+    volumes:
+      - app-data:/app/data
 
   mariadb:
     image: mariadb:10.5
@@ -25,15 +27,16 @@ services:
     ports:
       - "3307:3306"
     volumes:
-      - mariadb_data:/var/lib/mysql
+      - mariadb-data:/var/lib/mysql
 
   mongodb:
     image: mongo:5.0
     ports:
       - "27017:27017"
     volumes:
-      - mongodb_data:/data/db
+      - mongodb-data:/data/db
 
 volumes:
-  mariadb_data:
-  mongodb_data:
+  app-data:
+  mariadb-data:
+  mongodb-data:
