@@ -10,10 +10,21 @@ DOCKER_COMPOSE_FILE="docker-compose.yml"  # Path to your docker-compose file
 echo "Current Directory:"
 pwd
 
+# Check if any Docker containers are running
+if [ "$(docker ps -q)" ]; then
+  echo "Stopping all running Docker containers..."
+  docker-compose down || { echo "Failed to stop running Docker containers"; exit 1; }
+  docker stop $(docker ps -q) || { echo "Failed to stop running Docker containers"; exit 1; }
+#   echo "Removing all stopped Docker containers..."
+#   docker rm $(docker ps -a -q) || { echo "Failed to remove Docker containers"; exit 1; }
+else
+  echo "No running Docker containers found."
+fi
+
 # Check if the Docker container for the app is running
 if [ "$(docker ps -q -f name=$SERVICE_NAME)" ]; then
   echo "Stopping and removing the existing Docker container for $SERVICE_NAME..."
-  docker-compose down || { echo "Failed to stop and remove the Docker container for $SERVICE_NAME"; exit 1; }
+#   docker-compose down || { echo "Failed to stop and remove the Docker container for $SERVICE_NAME"; exit 1; }
   docker stop $(docker ps -q) || { echo "Failed to stop and remove the Docker container"; exit 1; }
 else
   echo "No running container with name $SERVICE_NAME found."
@@ -22,8 +33,8 @@ fi
 # Check if MongoDB container is running
 if [ "$(docker ps -q -f name=$MONGO_NAME)" ]; then
   echo "Stopping and removing the existing MongoDB container..."
-  docker stop mongodb || { echo "Failed to stop the MongoDB container"; exit 1; }
-  # docker rm mongodb || { echo "Failed to remove the MongoDB container"; exit 1; }
+  docker stop $MONGO_NAME || { echo "Failed to stop the MongoDB container"; exit 1; }
+#   docker rm $MONGO_NAME || { echo "Failed to remove the MongoDB container"; exit 1; }
 else
   echo "No running MongoDB container found."
 fi
@@ -31,7 +42,8 @@ fi
 # Check if MySQL container is running
 if [ "$(docker ps -q -f name=$MYSQL_NAME)" ]; then
   echo "Stopping and removing the existing MySQL container..."
-  docker stop mariadb || { echo "Failed to stop the MySQL container"; exit 1; }
+  docker stop $MYSQL_NAME || { echo "Failed to stop the MySQL container"; exit 1; }
+#   docker stop $MySQL || { echo "Failed to stop the MySQL container"; exit 1; }
   # docker rm mariadb || { echo "Failed to remove the MySQL container"; exit 1; }
 else
   echo "No running MySQL container found."
@@ -43,8 +55,8 @@ docker build -t $IMAGE_NAME . || { echo "Docker build failed"; exit 1; }
 
 # Start the Docker container
 echo "Starting the Docker container..."
-# docker-compose up -d || { echo "Failed to start the Docker container"; exit 1; }
-docker-compose up --build -d || { echo "Failed to start the Docker container"; exit 1; }
+docker-compose up -d || { echo "Failed to start the Docker container"; exit 1; }
+# docker-compose up --build -d || { echo "Failed to start the Docker container"; exit 1; }
 
 # Check the status of the Docker container
 echo "Checking the status of the Docker container..."
