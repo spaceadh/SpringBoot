@@ -17,7 +17,6 @@ if [ "$(docker ps -q)" ]; then
 
   echo "Removing all stopped Docker containers... Line 18"
   docker stop $(docker ps -q) || { echo "Failed to stop running Docker containers"; exit 1; }
-#   echo "Removing all stopped Docker containers..."
 #   docker rm $(docker ps -a -q) || { echo "Failed to remove Docker containers"; exit 1; }
 else
   echo "No running Docker containers found."
