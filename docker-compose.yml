@@ -2,9 +2,9 @@ version: '3.8'
 
 services:
   app:
-    image: deeppoemsinc  # Make sure this is the name of your Docker image
+    image: deeppoemsinc
     ports:
-      - "7072:7071"  # Map container port to host port
+      - "7072:7071"
     depends_on:
       - mariadb
       - mongodb
@@ -23,9 +23,17 @@ services:
       MYSQL_USER: victoralvin
       MYSQL_PASSWORD: HelloWorld20*
     ports:
-      - "3307:3306"  # Map container port to host port
+      - "3307:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
 
   mongodb:
     image: mongo:5.0
     ports:
-      - "27017:27017"  # Map container port to host port
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mariadb_data:
+  mongodb_data:
