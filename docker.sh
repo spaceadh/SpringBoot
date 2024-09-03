@@ -42,7 +42,6 @@ fi
 # Check if MySQL container is running
 if [ "$(docker ps -q -f name=$MYSQL_NAME)" ]; then
   echo "Stopping and removing the existing MySQL container..."
-  # docker stop $MYSQL_NAME || { echo "Failed to stop the MySQL container"; exit 1; }
 else
   echo "No running MySQL container found."
 fi
