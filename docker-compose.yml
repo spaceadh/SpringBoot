@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   app:
@@ -10,11 +10,13 @@ services:
       - mongodb
     environment:
       SPRING_APPLICATION_NAME: Poetic-Justice
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/spring?allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_URL: jdbc:mariadb://host.docker.internal:3306/spring?allowPublicKeyRetrieval=true&useSSL=false
       SPRING_DATASOURCE_USERNAME: victoralvin
       SPRING_DATASOURCE_PASSWORD: HelloWorld20*
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/springboot
-
+      SPRING_DATA_MONGODB_URI: mongodb://host.docker.internal:27017/springboot
+      # mongodb://mongodb:27017/springboot
+# uri: mongodb://host.docker.internal:27017/springboot
+# jdbc:mariadb://mariadb:3306/spring?allowPublicKeyRetrieval=true&useSSL=false
   mariadb:
     image: mariadb:10.5
     environment:
