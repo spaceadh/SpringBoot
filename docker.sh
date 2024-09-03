@@ -26,7 +26,6 @@ fi
 # Check if the Docker container for the app is running
 if [ "$(docker ps -q -f name=$SERVICE_NAME)" ]; then
   echo "Stopping and removing the existing Docker container for $SERVICE_NAME..."
-  # docker-compose down || { echo "Failed to stop and remove the Docker container for $SERVICE_NAME"; exit 1; }   
 else
   echo "No running container with name $SERVICE_NAME found."
 fi
