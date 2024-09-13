@@ -6,7 +6,11 @@ uploads/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+.env
+*.log
+# .dockerignor
+.hs_err_pid*
+.replay_pid*
 ### STS ###
 .apt_generated
 .classpath
