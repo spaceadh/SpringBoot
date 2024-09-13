@@ -43,6 +43,7 @@ import com.poeticjustice.deeppoemsinc.utils.JwtTokenUtil;
 import com.poeticjustice.deeppoemsinc.utils.PdfService;
 import com.poeticjustice.deeppoemsinc.validators.LoginRequest;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.validation.Valid;
 
 @RestController
@@ -80,8 +81,13 @@ public class DonationsUserController {
 
         // Prepare context for Thymeleaf
         Context context = new Context();
+
+        Dotenv dotenv = Dotenv.load();
+        String baseUrl = dotenv.get("BASE_URL");
+        logger.info("Database URL: {}", baseUrl);
+
         // Send email
-        String resetUrl = "http://localhost:7071/reset-password?token=" + refreshToken;
+        String resetUrl = baseUrl +"/reset-password?token=" + refreshToken;
         
         context.setVariable("resetUrl", resetUrl);
          // Send welcome email
@@ -205,6 +211,8 @@ public class DonationsUserController {
 
             // Extract email from token
             String email = jwtTokenUtil.getUsernameFromToken(token);
+            logger.info("Email {} :", email);
+            
             if (email == null || email.isEmpty()) {
                 throw new UnauthorizedUser("User is not authorized");
             }

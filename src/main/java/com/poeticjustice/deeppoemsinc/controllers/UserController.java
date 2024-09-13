@@ -272,56 +272,56 @@ public class UserController {
         return UserRespository.findAll();
     }
 
-    // @PostMapping("/admin-register")
-    // public ResponseEntity<?> registerUser(@RequestBody Map<String, String> body) throws NoSuchAlgorithmException{
-    //      // Log the request body and token
-    //     logger.info("Request Body: {}", body);
+    @PostMapping("/admin-register")
+    public ResponseEntity<?> registerUser(@RequestBody Map<String, String> body) throws NoSuchAlgorithmException{
+         // Log the request body and token
+        logger.info("Request Body: {}", body);
 
-    //     String firstName = body.get("firstName");
-    //     String lastName = body.get("lastName");
-    //     String email = body.get("email");
-    //     //validate email    
-    //     Pattern p = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
-    //     Matcher m = p.matcher(email);
-    //     if(!m.matches()){
-    //         // throw new InvalidEmailException("Email is not valid");
-    //         return ResponseEntity.badRequest().body(new ErrorResponse(404, "Email is not valid"));
-    //     }
-    //     String role;
-    //     role = "Admin";   
-    //     //check if email is in use
-    //     List<User> users = UserRespository.findByEmail(email);
-    //     if(!users.isEmpty()){
-    //         // throw new EmailAlreadyInUseException("Email is already in use");
-    //         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(404, "Email is already in use"));
-    //     }
-    //     String phoneNumber = body.get("phoneNumber");
-    //     //validate phone
-    //     p = Pattern.compile("^[0-9]{10}$");
-    //     m = p.matcher(phoneNumber);
-    //     if(!m.matches()){
-    //         // throw new InvalidPhoneNumberException("Phone Number is not valid");
-    //         return ResponseEntity.badRequest().body(new ErrorResponse(404, "Phone Number is not valid"));
-    //     }
-    //     //check if phone is in use
-    //     users = UserRespository.findByPhoneNumber(phoneNumber);
-    //     if(!users.isEmpty()){
-    //         // throw new PhoneNumberAlreadyInUseException("Phone Number is already in use");
-    //         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(404, "Phone Number is already in use"));
-    //     }
-    //     String password = body.get("password");
-    //     //validate password
-    //     p = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
-    //     m = p.matcher(password);
-    //     if(!m.matches()){
-    //         // throw new InvalidPasswordException("Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character");
-    //         return ResponseEntity.badRequest().body(new ErrorResponse(404, "Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character"));
-    //     }
-    //     User user = new User();
-    //     // User savedUser = UserRespository.save(user);
-    //     User savedUser = UserRespository.save(new User(firstName, lastName, email, phoneNumber, password, role));
-    //     return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
-    // }
+        String firstName = body.get("firstName");
+        String lastName = body.get("lastName");
+        String email = body.get("email");
+        //validate email    
+        Pattern p = Pattern.compile("^[a-zA-Z0-9_!#$%&’*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$");
+        Matcher m = p.matcher(email);
+        if(!m.matches()){
+            // throw new InvalidEmailException("Email is not valid");
+            return ResponseEntity.badRequest().body(new ErrorResponse(404, "Email is not valid"));
+        }
+        String role;
+        role = "Admin";   
+        //check if email is in use
+        List<User> users = UserRespository.findByEmail(email);
+        if(!users.isEmpty()){
+            // throw new EmailAlreadyInUseException("Email is already in use");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(404, "Email is already in use"));
+        }
+        String phoneNumber = body.get("phoneNumber");
+        //validate phone
+        p = Pattern.compile("^[0-9]{10}$");
+        m = p.matcher(phoneNumber);
+        if(!m.matches()){
+            // throw new InvalidPhoneNumberException("Phone Number is not valid");
+            return ResponseEntity.badRequest().body(new ErrorResponse(404, "Phone Number is not valid"));
+        }
+        //check if phone is in use
+        users = UserRespository.findByPhoneNumber(phoneNumber);
+        if(!users.isEmpty()){
+            // throw new PhoneNumberAlreadyInUseException("Phone Number is already in use");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(404, "Phone Number is already in use"));
+        }
+        String password = body.get("password");
+        //validate password
+        p = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+        m = p.matcher(password);
+        if(!m.matches()){
+            // throw new InvalidPasswordException("Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character");
+            return ResponseEntity.badRequest().body(new ErrorResponse(404, "Password is not valid. Must contain at least 8 characters, one uppercase, one lowercase, one number, and one special character"));
+        }
+        User user = new User();
+        // User savedUser = UserRespository.save(user);
+        User savedUser = UserRespository.save(new User(firstName, lastName, email, phoneNumber, password, role));
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    }
 
     @PostMapping("/user/create")
     public ResponseEntity<?> createUser(@RequestBody Map<String, String> body, @RequestHeader Map<String, String> headers) {

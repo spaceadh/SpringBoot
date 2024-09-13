@@ -4,9 +4,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
+@Data
+@Slf4j
+@Table(name = "books")
 public class Book {
     @Id
     // @GeneratedValue(strategy = GenerationType.AUTO)

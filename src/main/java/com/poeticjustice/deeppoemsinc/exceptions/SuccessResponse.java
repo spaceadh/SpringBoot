@@ -9,11 +9,18 @@ public class SuccessResponse {
 
     private Integer responseCode;
     private String message;
+    private String url;
     private DonationAppUser savedUser;
 
     public SuccessResponse(Integer responseCode, String message) {
         this.responseCode = responseCode;
         this.message = message;
+    }
+
+    public SuccessResponse(Integer responseCode, String message, String url) {
+        this.responseCode = responseCode;
+        this.message = message;
+        this.url = url;
     }
 
     public SuccessResponse(int responseCode,String message, DonationAppUser savedUser) {
