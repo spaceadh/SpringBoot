@@ -2,10 +2,20 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: 
+       - main
+       - DonationsApp
 
+  pull_request:
+    branches: 
+       - main
+       - DonationsApp
+
+# Ensure that the workflow has permission to write packages.
+permissions:
+  contents: read
+  packages: write
+  
 jobs:
   build:
     runs-on: ubuntu-latest
