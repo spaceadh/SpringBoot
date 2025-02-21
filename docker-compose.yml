@@ -18,7 +18,7 @@ services:
       - app-data:/app/data
 
   mariadb:
-    image: mariadb:10.5
+    image: mariadb:latest
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: spring
@@ -30,13 +30,28 @@ services:
       - mariadb-data:/var/lib/mysql
 
   mongodb:
-    image: mongo:5.0
+    # image: mongo:5.0
+    image: mongo:latest
+    restart: always
     ports:
       - "27017:27017"
     volumes:
       - mongodb-data:/data/db
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_DATABASE=your_mysql_db
+      - MYSQL_USER=mysql_user
+      - MYSQL_PASSWORD=mysql_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
 
 volumes:
   app-data:
   mariadb-data:
   mongodb-data:
+  mysql-data:
