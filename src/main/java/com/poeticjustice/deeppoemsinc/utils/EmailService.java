@@ -73,8 +73,11 @@ public class EmailService {
         messageHelper.setSubject(subject);
         messageHelper.setText(htmlBody, true);
 
-        // Add attachment
-        messageHelper.addAttachment(attachment.getName(), attachment);
+        // Check if the attachment exists
+        if (attachment.exists()) {
+            // Add attachment
+            messageHelper.addAttachment(attachment.getName(), attachment);
+        }
 
         // Send the email
         emailSender.send(mimeMessage);

@@ -2,9 +2,9 @@ package com.poeticjustice.deeppoemsinc.controllers;
 
 import com.poeticjustice.deeppoemsinc.dtos.ErrorResponseDto;
 import com.poeticjustice.deeppoemsinc.dtos.NotificationRequest;
+import com.poeticjustice.deeppoemsinc.dtos.SuccessResponseDto;
 import com.poeticjustice.deeppoemsinc.exceptions.InvalidNotificationException;
 import com.poeticjustice.deeppoemsinc.exceptions.LacksAuthorizationHeader;
-import com.poeticjustice.deeppoemsinc.exceptions.SuccessResponse;
 import com.poeticjustice.deeppoemsinc.exceptions.UnauthorizedUser;
 import com.poeticjustice.deeppoemsinc.exceptions.InvalidToken;
 import com.poeticjustice.deeppoemsinc.models.mysql.User;
@@ -133,7 +133,7 @@ public class NotificationController {
             // Return success response
             String notificationUrl = baseUrl + "/notifications/" + request.getReference();
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new SuccessResponse(201, "Notification created successfully", notificationUrl));
+                    .body(new SuccessResponseDto(201, "Notification created successfully", notificationUrl));
 
         } catch (LacksAuthorizationHeader | UnauthorizedUser | InvalidToken e) {
             logger.error("Authorization error: ", e);

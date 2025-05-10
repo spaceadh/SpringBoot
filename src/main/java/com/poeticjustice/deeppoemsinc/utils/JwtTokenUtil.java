@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import com.poeticjustice.deeppoemsinc.exceptions.InvalidJwtTokenException;
 import com.poeticjustice.deeppoemsinc.exceptions.JwtTokenCreationException;
-import com.poeticjustice.deeppoemsinc.models.DonationAppUser;
 import com.poeticjustice.deeppoemsinc.models.mysql.User;
 
 import io.jsonwebtoken.Claims;
@@ -97,22 +96,8 @@ public class JwtTokenUtil implements Serializable {
             throw new JwtTokenCreationException("Error creating JWT token");
         }
     }
-    
-	// Generate token for user
-    public String generateDonationToken(DonationAppUser user) {
-        try {
-            Map<String, Object> claims = new HashMap<>();
-            return doGenerateToken(claims, user.getEmail());
-        } catch (Exception e) {
-            throw new JwtTokenCreationException("Error creating JWT token");
-        }
-    }
 
-	//while creating the token -
-	//1. Define  claims of the token, like Issuer, Expiration, Subject, and the ID
-	//2. Sign the JWT using the HS512 algorithm and secret key.
-	//3. According to JWS Compact Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
-	//   compaction of the JWT to a URL-safe string 
+	//while creating the token
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
         try {
             return Jwts.builder()
@@ -129,16 +114,6 @@ public class JwtTokenUtil implements Serializable {
 
 	// Validate User token
     public Boolean validateToken(String token, User user) {
-        try {
-            final String username = getUsernameFromToken(token);
-            return (username.equals(user.getEmail()) && !isTokenExpired(token));
-        } catch (Exception e) {
-            throw new InvalidJwtTokenException("Invalid JWT token");
-        }
-    }
-
-    // Validate token
-    public Boolean validateDonationToken(String token, DonationAppUser user) {
         try {
             final String username = getUsernameFromToken(token);
             return (username.equals(user.getEmail()) && !isTokenExpired(token));
