@@ -4,7 +4,7 @@ import com.poeticjustice.deeppoemsinc.dtos.NotificationRequest;
 import com.poeticjustice.deeppoemsinc.exceptions.InvalidNotificationException;
 import com.poeticjustice.deeppoemsinc.models.mongo.NotificationDocument;
 import com.poeticjustice.deeppoemsinc.Repository.mongodb.NotificationMongoRepository;
-import com.poeticjustice.deeppoemsinc.helper.ValidationHelper;
+import com.poeticjustice.deeppoemsinc.helpers.ValidationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

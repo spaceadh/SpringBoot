@@ -1,4 +1,4 @@
-package com.poeticjustice.deeppoemsinc.helper;
+package com.poeticjustice.deeppoemsinc.helpers;
 
 import com.poeticjustice.deeppoemsinc.dtos.NotificationRequest;
 import org.slf4j.Logger;

@@ -52,4 +52,12 @@ public class NotificationRequest {
         private String fileType;
         private String base64Attachment;
     }
+
+    public List<Recipient> getRecipients() {
+        return recipients;
+    }
+
+    public void setRecipients(List<Recipient> recipients) {
+        this.recipients = recipients;
+    }
 }

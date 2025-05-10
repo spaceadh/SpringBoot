@@ -231,4 +231,27 @@ public class NotificationDocument {
         private String fileType;
         private String base64Attachment;
     }
+
+    public boolean hasAttachment() {
+        return hasAttachment;
+    }
+    public void setHasAttachment(boolean hasAttachment) {
+        this.hasAttachment = hasAttachment;
+    }
+
+    public boolean IsQueued() {
+        return isQueued;
+    }
+    public void setIsQueued(boolean isQueued) {
+        this.isQueued = isQueued;
+    }
+    
+
+    // public List<Recipient> getRecipients() {
+    //     return recipients;
+    // }
+
+    // public void setRecipients(List<Recipient> recipients) {
+    //     this.recipients = recipients;
+    // }
 }
