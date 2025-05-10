@@ -1,0 +1,74 @@
+{
+  "401": {
+    "en": "We could not complete your request at the moment",
+    "sw": "Hatukuweza kukamilisha ombi lako kwa sasa."
+  },
+  "410": {
+    "en": "Notification with this reference already exists.",
+    "sw": "Taarifa yenye marejeleo haya tayari ipo."
+  },
+  "411": {
+    "en": "Reference is a required field.",
+    "sw": "Marejeleo ni sehemu inayohitajika."
+  },
+  "412": {
+    "en": "Message is a required field.",
+    "sw": "Ujumbe ni sehemu inayohitajika."
+  },
+  "413": {
+    "en": "Invalid Recipient(s) provided.",
+    "sw": "Mpokeaji si sahihi."
+  },
+  "413.1": {
+    "en": "Invalid Recipient(s) provided.",
+    "sw": "Mpokeaji si sahihi."
+  },
+  "413.2": {
+    "en": "Invalid Email Format provided.",
+    "sw": "Muundo wa barua pepe si sahihi."
+  },
+  "413.3": {
+    "en": "Invalid Phone Format provided.",
+    "sw": "Muundo wa nambari ya simu si sahihi."
+  },
+  "413.4": {
+    "en": "Invalid Kenyan Phone Number provided.",
+    "sw": "Nambari ya simu ya Kenya si sahihi."
+  },
+  "414": {
+    "en": "Invalid Product Name provided.",
+    "sw": "Jina la bidhaa si sahihi."
+  },
+  "415": {
+    "en": "Invalid Country Code provided.",
+    "sw": "Msimbo wa nchi si sahihi."
+  },
+  "416": {
+    "en": "Missing File name on attachment provided.",
+    "sw": "Jina la faili limekosekana kwenye kiambatisho."
+  },
+  "417": {
+    "en": "Missing Base64 Attachment on attachment provided.",
+    "sw": "Kiambatisho cha Base64 kinakosekana."
+  },
+  "418": {
+    "en": "Invalid FileName on attachment provided.",
+    "sw": "Jina la faili kwenye kiambatisho si sahihi."
+  },
+  "419": {
+    "en": "Invalid Base64 Attachment on attachment provided.",
+    "sw": "Kiambatisho cha Base64 si sahihi."
+  },
+  "420": {
+    "en": "Base64 Attachment exceeds allowed size.",
+    "sw": "Kiambatisho cha Base64 kimezidi ukubwa unaoruhusiwa."
+  },
+  "421": {
+    "en": "File type uploaded is not allowed.",
+    "sw": "Aina ya faili iliyopakiwa hairuhusiwi."
+  },
+  "422": {
+    "en": "Subject exceeds maximum allowed length.",
+    "sw": "Kichwa cha habari kimezidi urefu unaoruhusiwa."
+  }
+}
