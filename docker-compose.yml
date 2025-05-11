@@ -27,7 +27,7 @@ services:
       MYSQL_USER: victoralvin
       MYSQL_PASSWORD: HelloWorld20*
     ports:
-      - "3307:3306"
+      - "3306:3306"
     depends_on:
       - mongodb
     volumes:

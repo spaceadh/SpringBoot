@@ -1,22 +1,21 @@
-package com.poeticjustice.deeppoemsinc.gateways;
+package com.poeticjustice.deeppoemsinc.gateways.sms;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
 @Component
-public class GatewayFactory {
+public class SMSGatewayFactory {
 
     private final ApplicationContext applicationContext;
     private final Map<String, String> configuration;
     private static final String DEFAULT_GATEWAY = "AfricasTalking";
     private final Map<String, String> countryToGatewayMap;
-    private Logger logger = LoggerFactory.getLogger(GatewayFactory.class);
+    private Logger logger = LoggerFactory.getLogger(SMSGatewayFactory.class);
 
-    public GatewayFactory(ApplicationContext applicationContext, Map<String, String> configuration) {
+    public SMSGatewayFactory(ApplicationContext applicationContext, Map<String, String> configuration) {
         this.applicationContext = applicationContext;
         this.configuration = configuration;
         this.countryToGatewayMap = Map.of(

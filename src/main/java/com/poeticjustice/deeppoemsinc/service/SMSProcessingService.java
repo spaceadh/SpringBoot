@@ -1,12 +1,13 @@
 package com.poeticjustice.deeppoemsinc.service;
 
-import com.poeticjustice.deeppoemsinc.gateways.GatewayFactory;
-import com.poeticjustice.deeppoemsinc.gateways.ISMSGateway;
 import com.poeticjustice.deeppoemsinc.models.mongo.DeadLetterEntry;
 import com.poeticjustice.deeppoemsinc.models.mongo.QueuedSMS;
 import com.mongodb.MongoException;
 import com.poeticjustice.deeppoemsinc.Repository.mongodb.DeadLetterRepository;
 import com.poeticjustice.deeppoemsinc.Repository.mongodb.QueuedSMSRepository;
+import com.poeticjustice.deeppoemsinc.gateways.sms.SMSGatewayFactory;
+import com.poeticjustice.deeppoemsinc.gateways.sms.ISMSGateway;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.MongoTransactionException;
@@ -28,10 +29,10 @@ public class SMSProcessingService {
     private static final Logger logger = LoggerFactory.getLogger(SMSProcessingService.class);
 
     private final QueuedSMSRepository smsRepository;
-    private final GatewayFactory gatewayFactory;
+    private final SMSGatewayFactory gatewayFactory;
     private final DeadLetterRepository deadLetterRepository;
 
-    public SMSProcessingService(QueuedSMSRepository smsRepository, GatewayFactory gatewayFactory,
+    public SMSProcessingService(QueuedSMSRepository smsRepository, SMSGatewayFactory gatewayFactory,
                                DeadLetterRepository deadLetterRepository) {
         this.smsRepository = smsRepository;
         this.gatewayFactory = gatewayFactory;

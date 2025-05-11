@@ -1,4 +1,4 @@
-package com.poeticjustice.deeppoemsinc.gateways;
+package com.poeticjustice.deeppoemsinc.gateways.sms;
 import java.util.concurrent.CompletableFuture;
 import com.poeticjustice.deeppoemsinc.models.mongo.QueuedSMS;
 

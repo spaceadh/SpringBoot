@@ -1,4 +1,4 @@
-package com.poeticjustice.deeppoemsinc.gateways;
+package com.poeticjustice.deeppoemsinc.gateways.sms;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poeticjustice.deeppoemsinc.models.mongo.QueuedSMS;
