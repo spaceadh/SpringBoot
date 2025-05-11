@@ -1,7 +1,6 @@
 package com.poeticjustice.deeppoemsinc.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.poeticjustice.deeppoemsinc.helpers.ValidationHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,11 +16,6 @@ public class AppConfig {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
-
-    // @Bean
-    // public ValidationHelper validationHelper() {
-    //     return new ValidationHelper();
-    // }
 
     @Bean
     public ObjectMapper objectMapper() {
