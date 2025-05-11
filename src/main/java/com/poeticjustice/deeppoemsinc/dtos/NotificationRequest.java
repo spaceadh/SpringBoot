@@ -48,7 +48,7 @@ public class NotificationRequest {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Attachment {
-        private String fileName;
+        private String fileName = "attachment";
         private String fileType;
         private String base64Attachment;
     }

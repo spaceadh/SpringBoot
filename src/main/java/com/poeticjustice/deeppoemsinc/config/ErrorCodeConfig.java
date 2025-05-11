@@ -17,17 +17,32 @@ public class ErrorCodeConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(ErrorCodeConfig.class);
 
-    @Bean
+    @Bean(name = "errorCodesMap")
     public Map<String, Map<String, String>> errorCodes() {
         ObjectMapper objectMapper = new ObjectMapper();
         ClassPathResource resource = new ClassPathResource("ErrorCode.json");
         try {
             if (!resource.exists()) {
-                logger.error("ErrorCode.json not found in classpath. Returning empty map as fallback.");
+                logger.error("ErrorCode.json not found in classpath at path: {}", resource.getPath());
                 return new HashMap<>();
             }
-            logger.info("Loading ErrorCode.json from classpath");
-            return objectMapper.readValue(resource.getInputStream(), new TypeReference<Map<String, Map<String, String>>>() {});
+            if (!resource.isReadable()) {
+                logger.error("ErrorCode.json is not readable at path: {}", resource.getPath());
+                return new HashMap<>();
+            }
+
+            logger.info("Loading ErrorCode.json from classpath: {}", resource.getPath());
+            Map<String, Map<String, String>> errorCodeMap = objectMapper.readValue(
+                resource.getInputStream(), 
+                new TypeReference<Map<String, Map<String, String>>>() {}
+            );
+
+            logger.info("Successfully loaded {} error codes", errorCodeMap.size());
+            errorCodeMap.forEach((key, value) -> {
+                logger.info("Loaded error code: {} with details: {}", key, value);
+            });
+
+            return errorCodeMap;
         } catch (IOException e) {
             logger.error("Failed to load ErrorCode.json: {}", e.getMessage(), e);
             return new HashMap<>();

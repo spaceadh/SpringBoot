@@ -75,8 +75,8 @@ public class PostmarkGateway implements IEmailGateway {
                         .map(attachment -> {
                             Map<String, String> att = new HashMap<>();
                             att.put("Name", attachment.getFileName());
-                            att.put("Content", attachment.getFileType());
-                            att.put("ContentType", attachment.getBase64Attachment());
+                            att.put("Content", attachment.getBase64Attachment()); // Actual base64 content
+                            att.put("ContentType", attachment.getFileType()); // MIME type
                             return att;
                         })
                         .collect(Collectors.toList());

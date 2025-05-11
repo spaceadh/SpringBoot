@@ -57,6 +57,10 @@ public class ValidationHelper {
             }
 
             for (NotificationRequest.Attachment attachment : notificationDto.getAttachment()) {
+                if (!isValidFileName(attachment.getFileName())) {
+                    logger.warn("Invalid attachment file name: {}", notificationDto.getReference());
+                    return new ValidationResult(false, "416");
+                }
                 if (!isValidBase64(attachment.getBase64Attachment())) {
                     logger.warn("Invalid Base64 attachment: {}", attachment.getFileName());
                     return new ValidationResult(false, "419");
@@ -141,8 +145,10 @@ public class ValidationHelper {
         }   
         try {
             logger.info("Base64 string length: {}", base64String.length());
-            byte[] decodedBytes = Base64.getDecoder().decode(base64String);
-            return decodedBytes.length > 0;
+            // byte[] decodedBytes = Base64.getDecoder().decode(base64String);
+            // return decodedBytes.length > 0;
+            Base64.getDecoder().decode(base64String);
+            return true;    
         } catch (IllegalArgumentException e) {
             logger.warn("Invalid Base64 string: {}", e.getMessage());
             return false;
