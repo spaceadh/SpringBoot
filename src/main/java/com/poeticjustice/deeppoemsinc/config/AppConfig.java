@@ -1,6 +1,11 @@
 package com.poeticjustice.deeppoemsinc.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poeticjustice.deeppoemsinc.helpers.ValidationHelper;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -13,8 +18,23 @@ public class AppConfig {
         return new RestTemplate();
     }
 
+    // @Bean
+    // public ValidationHelper validationHelper() {
+    //     return new ValidationHelper();
+    // }
+
     @Bean
-    public ValidationHelper validationHelper() {
-        return new ValidationHelper();
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
+    }
+
+    @Bean
+    public Map<String, String> gatewayConfiguration() {
+        Map<String, String> config = new HashMap<>();
+        // Load from application.properties or environment
+        config.put("SMS:AfricasTalking:Chamasoft:Username", System.getenv("AT_USERNAME"));
+        config.put("SMS:AfricasTalking:Chamasoft:ApiKey", System.getenv("AT_API_KEY"));
+        config.put("SMS:AfricasTalking:Chamasoft:senderId", System.getenv("AT_SENDER_ID"));
+        return config;
     }
 }
