@@ -5,11 +5,12 @@ on:
     branches: 
        - main
        - DonationsApp
-
+       - notificationService
   pull_request:
     branches: 
        - main
        - DonationsApp
+       - notificationService
 
 # Ensure that the workflow has permission to write packages.
 permissions:
