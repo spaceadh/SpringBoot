@@ -8,40 +8,16 @@ import java.util.Map;
 
 @Component
 public class SMSGatewayFactory {
-
-    private final ApplicationContext applicationContext;
-    private final Map<String, String> configuration;
-    private static final String DEFAULT_GATEWAY = "AfricasTalking";
-    private final Map<String, String> countryToGatewayMap;
     private Logger logger = LoggerFactory.getLogger(SMSGatewayFactory.class);
+    private final AfricasTalkingGateway africasTalkingGateway;
 
-    public SMSGatewayFactory(ApplicationContext applicationContext, Map<String, String> configuration) {
-        this.applicationContext = applicationContext;
-        this.configuration = configuration;
-        this.countryToGatewayMap = Map.of(
-            "KE", "AfricasTalking",
-            "US", "Twilio",  // Example
-            "EU", "Infobip"  // Example
-        );
-        this.logger = logger;
+    public SMSGatewayFactory(AfricasTalkingGateway africasTalkingGateway) {
+        this.africasTalkingGateway = africasTalkingGateway;
+        
     }
 
     public ISMSGateway getSMSGateway(String countryCode) {
-        String gatewayName = countryToGatewayMap.getOrDefault(
-            countryCode.toUpperCase(), 
-            DEFAULT_GATEWAY
-        );
-        
-        try {
-            ISMSGateway gateway = (ISMSGateway) applicationContext.getBean(
-                gatewayName + "Gateway", 
-                ISMSGateway.class
-            );
-            logger.info("Selected {} SMS Gateway for country code: {}", gatewayName, countryCode);
-            return gateway;
-        } catch (Exception e) {
-            logger.error("Failed to initialize gateway {}: {}", gatewayName, e.getMessage());
-            return applicationContext.getBean(DEFAULT_GATEWAY + "Gateway", ISMSGateway.class);
-        }
+        logger.info("SMSGatewayFactory: getSMSGateway called with country code: {}", countryCode);
+        return africasTalkingGateway;
     }
 }
