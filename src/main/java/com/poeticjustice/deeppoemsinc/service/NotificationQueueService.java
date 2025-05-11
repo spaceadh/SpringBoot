@@ -68,8 +68,9 @@ public class NotificationQueueService {
                 notificationRepository.save(notification);
                 logger.info("Processed notification with reference: {}", notification.getReference());
             } catch (Exception e) {
-                logger.error("Failed to process notification with reference {}: {}", 
-                            notification.getReference(), e.getMessage(), e);
+                notification.setIsQueued(false);
+                notificationRepository.save(notification);
+                logger.error("Failed to process notification with reference {}: {}",notification.getReference(), e.getMessage(), e);
                 throw e; // Re-throw to trigger retry
             }
         }

@@ -43,7 +43,15 @@ public class NotificationService {
         }
 
         // Check for duplicate reference
-        if (notificationRepository.existsByReference(request.getReference())) {
+        boolean exists;
+        try {
+            exists = notificationRepository.existsByReference(request.getReference());
+        } catch (Exception e) {
+            logger.error("Error checking notification existence: {}", e.getMessage());
+            exists = false; // Default to false if check fails
+        }
+        
+        if (exists) {
             String errorCode = "410";
             String errorMessage = getLocalizedErrorMessage(errorCode, locale);
             logger.error("Duplicate reference: {} - {}", errorCode, errorMessage);

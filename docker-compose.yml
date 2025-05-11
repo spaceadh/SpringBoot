@@ -1,24 +1,26 @@
 version: '3.8'
 
 services:
-  app:
-    image: deeppoemsinc
-    ports:
-      - "7072:7071"
-    depends_on:
-      - mariadb
-      - mongodb
-    environment:
-      SPRING_APPLICATION_NAME: Poetic-Justice
-      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/spring?allowPublicKeyRetrieval=true&useSSL=false
-      SPRING_DATASOURCE_USERNAME: victoralvin
-      SPRING_DATASOURCE_PASSWORD: HelloWorld20*
-      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/springboot
-    volumes:
-      - app-data:/app/data
+  # app:
+  #   image: deeppoemsinc
+  #   ports:
+  #     - "7072:7071"
+  #   depends_on:
+  #     - mariadb
+  #     - mongodb
+  #   environment:
+  #     SPRING_APPLICATION_NAME: Poetic-Justice
+  #     SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/spring?allowPublicKeyRetrieval=true&useSSL=false
+  #     SPRING_DATASOURCE_USERNAME: victoralvin
+    #   SPRING_DATASOURCE_PASSWORD: HelloWorld20*
+    #   SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/springboot
+    # volumes:
+    #   - app-data:/app/data
 
   mariadb:
     image: mariadb:latest
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: spring
@@ -26,32 +28,34 @@ services:
       MYSQL_PASSWORD: HelloWorld20*
     ports:
       - "3307:3306"
+    depends_on:
+      - mongodb
     volumes:
       - mariadb-data:/var/lib/mysql
 
   mongodb:
-    # image: mongo:5.0
     image: mongo:latest
     restart: always
     ports:
       - "27017:27017"
     volumes:
       - mongodb-data:/data/db
-  mysql:
-    image: mysql:latest
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=example
-      - MYSQL_DATABASE=your_mysql_db
-      - MYSQL_USER=mysql_user
-      - MYSQL_PASSWORD=mysql_pass
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
+  # mysql:
+  #   image: mysql:latest
+  #   command: --default-authentication-plugin=mysql_native_password
+  #   restart: always
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: rootpassword
+  #     MYSQL_DATABASE: spring
+  #     MYSQL_USER: victoralvin
+  #     MYSQL_PASSWORD: HelloWorld20*
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
 
 volumes:
-  app-data:
+  # app-data:
   mariadb-data:
   mongodb-data:
-  mysql-data:
+  # mysql-data:

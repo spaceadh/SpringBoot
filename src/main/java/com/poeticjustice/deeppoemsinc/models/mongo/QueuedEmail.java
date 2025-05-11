@@ -1,6 +1,5 @@
 package com.poeticjustice.deeppoemsinc.models.mongo;
 
-import com.poeticjustice.deeppoemsinc.dtos.NotificationRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,10 +28,14 @@ public class QueuedEmail {
 
     @Builder.Default
     private boolean hasAttachment = false;
+
     private List<NotificationDocument.Attachment> attachment;
     private String productName;
     private String language;
     private String countryCode;
+
+    @Builder.Default
+    private boolean isSent = false;
 
     public boolean hasAttachment() {
         return hasAttachment;

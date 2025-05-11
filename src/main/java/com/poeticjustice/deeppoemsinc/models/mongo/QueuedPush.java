@@ -15,7 +15,6 @@ import java.util.Map;
 @NoArgsConstructor
 @Builder
 public class QueuedPush {
-
     @Id
     private String id;
     private String notificationId;
@@ -27,4 +26,7 @@ public class QueuedPush {
     private String productName;
     private String language;
     private String countryCode;
+
+    @Builder.Default
+    private boolean isSent = false;
 }

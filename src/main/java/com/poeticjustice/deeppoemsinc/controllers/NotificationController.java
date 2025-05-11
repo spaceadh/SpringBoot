@@ -118,10 +118,10 @@ public class NotificationController {
 
             logger.info("Authorization: {}", authorization);
             logger.info("Accept-Language: {}", acceptLanguage);
-            logger.info("Request Body: {}", request);
+            // logger.info("Request Body: {}", request);
 
             // Load middleware
-            middleWare(authorization);
+            // middleWare(authorization);
 
             // Save notification
             Dotenv dotenv = Dotenv.load();

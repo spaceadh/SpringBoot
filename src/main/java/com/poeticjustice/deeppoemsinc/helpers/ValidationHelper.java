@@ -135,13 +135,16 @@ public class ValidationHelper {
     }
 
     public boolean isValidBase64(String base64String) {
-        if (!isValidRequiredString(base64String)) {
+        if (base64String == null || base64String.isEmpty()) {
+            logger.warn("Base64 string is null or empty");
             return false;
-        }
+        }   
         try {
-            Base64.getDecoder().decode(base64String);
-            return true;
+            logger.info("Base64 string length: {}", base64String.length());
+            byte[] decodedBytes = Base64.getDecoder().decode(base64String);
+            return decodedBytes.length > 0;
         } catch (IllegalArgumentException e) {
+            logger.warn("Invalid Base64 string: {}", e.getMessage());
             return false;
         }
     }

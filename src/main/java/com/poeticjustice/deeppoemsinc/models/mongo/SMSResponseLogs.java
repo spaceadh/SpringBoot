@@ -7,25 +7,22 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Map;
-
-@Document(collection = "QueuedSMS")
+@Document(collection = "SMSResponseLogs")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QueuedSMS {
+public class SMSResponseLogs {
+
     @Id
     private String id;
-    private String notificationId;
     private String reference;
-    private String recipient;
     private String message;
-    private Map<String, String> tokens;
-    private String productName;
-    private String language;
+    private String recipient;
+    private String gateway;
+    private boolean isSuccessful;
+    private String response;
     private String countryCode;
-
-    @Builder.Default
-    private boolean isSent = false;
+    private String messageId;
+    private String cost;
 }
