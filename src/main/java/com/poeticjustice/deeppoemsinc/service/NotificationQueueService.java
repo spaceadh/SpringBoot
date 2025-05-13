@@ -3,6 +3,7 @@ package com.poeticjustice.deeppoemsinc.service;
 import com.poeticjustice.deeppoemsinc.models.mongo.QueuedEmail;
 import com.poeticjustice.deeppoemsinc.models.mongo.QueuedPush;
 import com.poeticjustice.deeppoemsinc.models.mongo.QueuedSMS;
+import com.poeticjustice.deeppoemsinc.helpers.TokenReplacementHelper;
 import com.poeticjustice.deeppoemsinc.models.mongo.NotificationDocument;
 import com.poeticjustice.deeppoemsinc.Repository.mongodb.QueuedEmailRepository;
 import com.poeticjustice.deeppoemsinc.Repository.mongodb.QueuedPushRepository;
@@ -33,16 +34,19 @@ public class NotificationQueueService {
     private final QueuedEmailRepository emailRepository;
     private final QueuedSMSRepository smsRepository;
     private final QueuedPushRepository pushRepository;
+    private final TokenReplacementHelper tokenReplacementHelper;
 
     public NotificationQueueService(
             NotificationMongoRepository notificationRepository,
             QueuedEmailRepository emailRepository,
             QueuedSMSRepository smsRepository,
-            QueuedPushRepository pushRepository) {
+            QueuedPushRepository pushRepository,
+            TokenReplacementHelper tokenReplacementHelper) {
         this.notificationRepository = notificationRepository;
         this.emailRepository = emailRepository;
         this.smsRepository = smsRepository;
         this.pushRepository = pushRepository;
+        this.tokenReplacementHelper = tokenReplacementHelper;
     }
 
     @Transactional
@@ -110,13 +114,15 @@ public class NotificationQueueService {
     }
 
     private void queueEmail(NotificationDocument notification, NotificationDocument.Recipient recipient) {
+        String tokenizedMessage = tokenReplacementHelper.replaceTokens(notification.getMessage(), notification.getTokens());
+        String tokenizedSubject = tokenReplacementHelper.replaceTokens(notification.getSubject(), notification.getTokens());
         QueuedEmail email = QueuedEmail.builder()
                 .id(UUID.randomUUID().toString())
                 .notificationId(notification.getId())
                 .reference(notification.getReference())
                 .recipient(recipient.getTo())
-                .message(notification.getMessage())
-                .subject(notification.getSubject())
+                .message(tokenizedMessage)
+                .subject(tokenizedSubject)
                 .tokens(notification.getTokens())
                 .hasAttachment(notification.hasAttachment())
                 .attachment(notification.getAttachment())
@@ -130,12 +136,14 @@ public class NotificationQueueService {
     }
 
     private void queueSMS(NotificationDocument notification, NotificationDocument.Recipient recipient) {
+        String tokenizedMessage = tokenReplacementHelper.replaceTokens(notification.getMessage(), notification.getTokens());
+
         QueuedSMS sms = QueuedSMS.builder()
                 .id(UUID.randomUUID().toString())
                 .notificationId(notification.getId())
                 .reference(notification.getReference())
                 .recipient(recipient.getTo())
-                .message(notification.getMessage())
+                .message(tokenizedMessage)
                 .tokens(notification.getTokens())
                 .productName(notification.getProductName())
                 .language(notification.getLanguage())
@@ -147,12 +155,14 @@ public class NotificationQueueService {
     }
 
     private void queuePush(NotificationDocument notification, NotificationDocument.Recipient recipient) {
+        String tokenizedMessage = tokenReplacementHelper.replaceTokens(notification.getMessage(), notification.getTokens());
+
         QueuedPush push = QueuedPush.builder()
                 .id(UUID.randomUUID().toString())
                 .notificationId(notification.getId())
                 .reference(notification.getReference())
                 .recipient(recipient.getTo())
-                .message(notification.getMessage())
+                .message(tokenizedMessage)
                 .tokens(notification.getTokens())
                 // .pushDetails(notification.getPushDetails())
                 .productName(notification.getProductName())

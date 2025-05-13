@@ -1,5 +1,6 @@
 package com.poeticjustice.deeppoemsinc.gateways.sms;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.poeticjustice.deeppoemsinc.models.mongo.QueuedSMS;
 import com.poeticjustice.deeppoemsinc.models.mongo.SMSResponseLogs;
@@ -82,6 +83,7 @@ public class AfricasTalkingGateway implements ISMSGateway {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
             headers.add("apiKey", apiKey);
+            headers.add("Accept", "application/json");
 
             MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
             formData.add("username", username);
@@ -92,14 +94,19 @@ public class AfricasTalkingGateway implements ISMSGateway {
 
             HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(formData, headers);
 
-
             String responseContent = restTemplate.postForObject(url, request, String.class);
             logger.info("AfricasTalking API Response: {}", responseContent);
 
+            // Configure ObjectMapper to handle the response properly
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             ATSMSResponse smsResponse = objectMapper.readValue(responseContent, ATSMSResponse.class);
-            if (smsResponse != null && smsResponse.getSMSMessageData() != null && smsResponse.getSMSMessageData().getRecipients() != null) {
-                boolean anySuccess = smsResponse.getSMSMessageData().getRecipients().stream()
-                    .anyMatch(r -> r.getStatusCode() == 200 || r.getStatusCode() == 406);
+
+            if (smsResponse != null && smsResponse.getSmsMessageData() != null 
+                    && smsResponse.getSmsMessageData().getRecipients() != null) {
+                // Africa's Talking uses statusCode 100 for success
+                boolean anySuccess = smsResponse.getSmsMessageData().getRecipients().stream()
+                    .anyMatch(r -> r.getStatusCode() == 100);
+                
                 recordATResponseLogNotification(notification, smsResponse, anySuccess);
                 return CompletableFuture.completedFuture(anySuccess);
             }
@@ -114,6 +121,15 @@ public class AfricasTalkingGateway implements ISMSGateway {
 
     private void recordATResponseLogNotification(QueuedSMS notification, ATSMSResponse smsResponse, boolean isSuccess) {
         try {
+            // Safely get the first recipient if available
+            ATSMSResponse.Recipient firstRecipient = null;
+            if (smsResponse.getSmsMessageData() != null 
+                    && smsResponse.getSmsMessageData().getRecipients() != null 
+                    && !smsResponse.getSmsMessageData().getRecipients().isEmpty()) {
+                firstRecipient = smsResponse.getSmsMessageData().getRecipients().get(0);
+            }
+
+            // Build the log entry using only fields that exist in SMSResponseLogs
             SMSResponseLogs smsLog = SMSResponseLogs.builder()
                     .id(UUID.randomUUID().toString())
                     .reference(notification.getReference())
@@ -121,18 +137,19 @@ public class AfricasTalkingGateway implements ISMSGateway {
                     .recipient(notification.getRecipient())
                     .gateway("AfricasTalking")
                     .isSuccessful(isSuccess)
-                    .response(smsResponse.getSMSMessageData().getMessage())
+                    .response(smsResponse.getSmsMessageData() != null 
+                        ? smsResponse.getSmsMessageData().getMessage() 
+                        : "No response message")
                     .countryCode(notification.getCountryCode())
-                    .messageId(smsResponse.getSMSMessageData().getRecipients() != null && !smsResponse.getSMSMessageData().getRecipients().isEmpty()
-                        ? smsResponse.getSMSMessageData().getRecipients().get(0).getMessageId() : null)
-                    .cost(smsResponse.getSMSMessageData().getRecipients() != null && !smsResponse.getSMSMessageData().getRecipients().isEmpty()
-                        ? smsResponse.getSMSMessageData().getRecipients().get(0).getCost() : null)
+                    .messageId(firstRecipient != null ? firstRecipient.getMessageId() : null)
+                    .cost(firstRecipient != null ? firstRecipient.getCost() : null)
                     .build();
 
             smsResponseLogsRepository.save(smsLog);
-            logger.info("AT SMS response logged successfully.");
+            logger.info("AT SMS response logged successfully for reference: {}", notification.getReference());
         } catch (Exception ex) {
-            logger.error("Error recording AT SMS response log: {}", ex.getMessage(), ex);
+            logger.error("Error recording AT SMS response log for reference {}: {}", 
+                notification.getReference(), ex.getMessage(), ex);
         }
     }
 }
