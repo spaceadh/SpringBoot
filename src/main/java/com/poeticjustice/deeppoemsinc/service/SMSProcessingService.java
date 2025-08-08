@@ -45,7 +45,7 @@ public class SMSProcessingService {
         maxAttempts = 3,
         backoff = @Backoff(delay = 1000)
     )
-    @Scheduled(fixedDelayString = "${sms.process.interval.seconds}000")
+    // @Scheduled(fixedDelayString = "${sms.process.interval.seconds}000")
     public void processUnsentSMS() {
         logger.info("Starting processing of unsent SMS");
         List<QueuedSMS> unsentSMS = smsRepository.findByIsSentFalse();

@@ -38,69 +38,6 @@ public class NotificationController {
         this.userRepository = userRepository;
     }
     
-    private void middleWare(String authorization) {
-        try {
-            if (authorization == null || authorization.isEmpty()) {
-                throw new LacksAuthorizationHeader("Authorization header is missing");
-            }
-            logger.info("Authorization: {}", authorization);
-
-            String token;
-
-            if (authorization.startsWith("Bearer ")) {
-                token = authorization.substring(7).trim(); // Remove 'Bearer ' prefix
-            } else {
-                token = authorization.trim(); // Use the token as is
-            }
-
-            // Initialize JwtTokenUtil
-            JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-
-            // Extract email from token
-            @Email
-            String email = jwtTokenUtil.getUsernameFromToken(token);
-            logger.info("Email extracted: {}", email);
-
-            if (email == null || email.isEmpty()) {
-                throw new UnauthorizedUser("User is not authorized");
-            }
-
-            // Check if user exists
-            List<User> users = userRepository.findByEmail(email);
-            logger.info("Users found: {}", users);
-            if (users.isEmpty()) {
-                throw new UnauthorizedUser("User is not authorized");
-            }
-            loggedInUser = users.get(0);
-
-            // Validate the token
-            if (!checkToken(loggedInUser, token)) {
-                logger.info("Token is not valid");
-                throw new InvalidToken("Token is not valid");
-            }
-
-            this.loggedInUser = loggedInUser;
-
-        } catch (LacksAuthorizationHeader e) {
-            logger.error("Authorization error: ", e);
-            throw e;
-        } catch (UnauthorizedUser e) {
-            logger.error("Unauthorized user error: ", e);
-            throw e;
-        } catch (InvalidToken e) {
-            logger.error("Invalid token error: ", e);
-            throw e;
-        } catch (Exception e) {
-            logger.error("Unexpected error: ", e);
-            throw new RuntimeException("An unexpected error occurred", e);
-        }
-    }
-
-    private boolean checkToken(User user, String token) {
-        JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        return jwtTokenUtil.validateToken(token, user);
-    }
-
     @PostMapping
     public ResponseEntity<?> createNotification(
             @Valid @RequestBody NotificationRequest request,

@@ -43,7 +43,7 @@ public class EmailProcessingService {
         maxAttempts = 3,
         backoff = @Backoff(delay = 1000)
     )
-    @Scheduled(fixedDelayString = "${email.process.interval.seconds}000")
+    // @Scheduled(fixedDelayString = "${email.process.interval.seconds}000")
     public void processUnsentEmails() {
         logger.info("Starting processing of unsent emails");
         List<QueuedEmail> unsentEmails = emailRepository.findByIsSentFalse();

@@ -7,12 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SpringBootApplication
-public class DeepPoemsIncApplication implements CommandLineRunner {
+public class UploadBoxApplication implements CommandLineRunner {
 
-	public static final Logger logger = LoggerFactory.getLogger(DeepPoemsIncApplication.class);
+	public static final Logger logger = LoggerFactory.getLogger(UploadBoxApplication.class);
 	public static void main(String[] args) {
 		logger.info("Starting application");
-		SpringApplication.run(DeepPoemsIncApplication.class, args);
+		SpringApplication.run(UploadBoxApplication.class, args);
 	}
 
 	@Override

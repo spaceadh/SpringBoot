@@ -4,11 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import io.github.cdimascio.dotenv.Dotenv;
-@SpringBootApplication
+
+@SpringBootApplication(exclude = {RedisAutoConfiguration.class})
 @EnableScheduling
 @EnableRetry
-public class DeepPoemsIncApplication {
+public class UploadBoxApplication {
 
     public static void main(String[] args) {
         // Load Dotenv
@@ -16,6 +18,6 @@ public class DeepPoemsIncApplication {
         // Set environment variables as system properties
         dotenv.entries().forEach(entry -> System.setProperty(entry.getKey(), entry.getValue()));
         
-        SpringApplication.run(DeepPoemsIncApplication.class, args);
+        SpringApplication.run(UploadBoxApplication.class, args);
     }
 }

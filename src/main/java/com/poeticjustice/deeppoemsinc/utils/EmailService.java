@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,5 +83,22 @@ public class EmailService {
         emailSender.send(mimeMessage);
         logger.info("HTML email with attachment sent to: {}", to);
     }
+
+    // public void sendQuotaWarningEmail(String userId, String email) {
+    //     try {
+    //         // MimeMessage message = emailSender.createMimeMessage();
+    //         jakarta.mail.internet.MimeMessage mimeMessage = emailSender.createMimeMessage();
+    //         MimeMessageHelper helper = new MimeMessageHelper(message, true);
+    //         helper.setTo(email);
+    //         helper.setSubject("Storage Quota Warning");
+    //         Context context = new Context();
+    //         context.setVariable("userId", userId);
+    //         String htmlContent = templateEngine.process("low_quota_email", context);
+    //         helper.setText(htmlContent, true);
+    //         mailSender.send(message);
+    //     } catch (Exception e) {
+    //         // Log error
+    //     }
+    // }
 
 }

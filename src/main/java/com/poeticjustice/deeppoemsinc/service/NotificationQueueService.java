@@ -51,7 +51,7 @@ public class NotificationQueueService {
         maxAttempts = 3,
         backoff = @Backoff(delay = 1000)
     )
-    @Scheduled(fixedDelayString = "${schedule.interval.seconds}000")
+    // @Scheduled(fixedDelayString = "${schedule.interval.seconds}000")
     public void processUnqueuedNotifications() {
         logger.info("Starting processing of unqueued notifications");
         List<NotificationDocument> unqueuedNotifications = notificationRepository.findByIsQueuedFalse();

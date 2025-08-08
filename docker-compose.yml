@@ -1,21 +1,28 @@
-version: '3.8'
-
 services:
   # app:
-  #   image: deeppoemsinc
+  #   build: .
+  #   container_name: pakia_buckets
   #   ports:
   #     - "7072:7071"
   #   depends_on:
   #     - mariadb
   #     - mongodb
+  #     - minio
+  #     # - redis
+  #     # - rabbitmq
   #   environment:
   #     SPRING_APPLICATION_NAME: Poetic-Justice
   #     SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/spring?allowPublicKeyRetrieval=true&useSSL=false
   #     SPRING_DATASOURCE_USERNAME: victoralvin
-    #   SPRING_DATASOURCE_PASSWORD: HelloWorld20*
-    #   SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/springboot
-    # volumes:
-    #   - app-data:/app/data
+  #     SPRING_DATASOURCE_PASSWORD: HelloWorld20*
+  #     SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/springboot
+  #     SPRING_REDIS_HOST: redis
+  #     SPRING_MINIO_ENDPOINT: http://minio:9000
+  #     SPRING_MINIO_ACCESS_KEY: minioadmin
+  #     SPRING_MINIO_SECRET_KEY: minioadmin
+  #     SPRING_MINIO_BUCKET: 
+  #   volumes:
+  #     - app-data:/app/data
 
   mariadb:
     image: mariadb:latest
@@ -27,19 +34,19 @@ services:
       MYSQL_USER: victoralvin
       MYSQL_PASSWORD: HelloWorld20*
     ports:
-      - "3306:3306"
-    depends_on:
-      - mongodb
+      - "3307:3306"
+    # depends_on:
+    #   - mongodb
     volumes:
       - mariadb-data:/var/lib/mysql
 
-  mongodb:
-    image: mongo:latest
-    restart: always
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb-data:/data/db
+  # mongodb:
+  #   image: mongo:latest
+  #   restart: always
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongodb-data:/data/db
   # mysql:
   #   image: mysql:latest
   #   command: --default-authentication-plugin=mysql_native_password
@@ -53,9 +60,40 @@ services:
   #     - "3306:3306"
   #   volumes:
   #     - mysql-data:/var/lib/mysql
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio-data:/data
 
+  # redis:
+  #   image: redis:7-alpine
+  #   container_name: redis
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis-data:/data
+
+  # rabbitmq:
+  #   image: rabbitmq:3-management
+  #   container_name: rabbitmq
+  #   ports:
+  #     - "5672:5672"     # for backend communication
+  #     - "15672:15672"   # for management UI
+  #   environment:
+  #     RABBITMQ_DEFAULT_USER: guest
+  #     RABBITMQ_DEFAULT_PASS: guest
 volumes:
   # app-data:
   mariadb-data:
-  mongodb-data:
+  # mongodb-data:
+  minio-data:
   # mysql-data:
+  # redis-data:
