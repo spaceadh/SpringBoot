@@ -1,7 +1,7 @@
 package com.poeticjustice.deeppoemsinc.application.events.consumer;
 
 import com.poeticjustice.deeppoemsinc.application.events.UploadEventPayload;
-import com.poeticjustice.deeppoemsinc.infrastructure.config.RabbitMQConfig;
+import com.poeticjustice.deeppoemsinc.infrastructure.config.rabbit.RabbitMQConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

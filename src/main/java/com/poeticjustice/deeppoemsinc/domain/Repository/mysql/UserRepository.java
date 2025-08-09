@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.poeticjustice.deeppoemsinc.domain.models.mysql.*;
 
 @Repository
-public interface UserRespository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<User, Integer> {
 
     // custom query to search to User post by title or content
     List<User> findByEmail(String email);

@@ -1,4 +1,4 @@
-package com.poeticjustice.deeppoemsinc.infrastructure.config;
+package com.poeticjustice.deeppoemsinc.infrastructure.config.rabbit;
 
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

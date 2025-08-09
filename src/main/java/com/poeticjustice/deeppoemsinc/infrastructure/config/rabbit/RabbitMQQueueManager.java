@@ -4,7 +4,6 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionListener;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PostConstruct;
@@ -17,7 +16,6 @@ public class RabbitMQQueueManager implements ConnectionListener {
     private final RabbitAdmin rabbitAdmin;
     private final List<Queue> queuesToDeclare;
 
-    @Autowired
     public RabbitMQQueueManager(ConnectionFactory connectionFactory, List<Queue> queuesToDeclare) {
         this.rabbitAdmin = new RabbitAdmin(connectionFactory);
         this.queuesToDeclare = queuesToDeclare;

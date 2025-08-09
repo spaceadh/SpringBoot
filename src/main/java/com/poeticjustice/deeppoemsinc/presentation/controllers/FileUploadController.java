@@ -1,7 +1,5 @@
 package com.poeticjustice.deeppoemsinc.presentation.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.poeticjustice.deeppoemsinc.application.dtos.FileUploadMeta;
 import com.poeticjustice.deeppoemsinc.application.dtos.UploadFileRequestDto;
 import com.poeticjustice.deeppoemsinc.common.exceptions.InvalidToken;
 import com.poeticjustice.deeppoemsinc.common.exceptions.LacksAuthorizationHeader;
@@ -12,8 +10,7 @@ import com.poeticjustice.deeppoemsinc.domain.service.QuotaService;
 import com.poeticjustice.deeppoemsinc.domain.service.SubscriptionValidatorService;
 import com.poeticjustice.deeppoemsinc.infrastructure.utils.JwtTokenUtil;
 import com.poeticjustice.deeppoemsinc.domain.models.mysql.User;
-import com.poeticjustice.deeppoemsinc.domain.Repository.mysql.UserRespository;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.poeticjustice.deeppoemsinc.domain.Repository.mysql.UserRepository;
 
 
 import org.springframework.http.HttpStatus;
@@ -23,17 +20,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping("/api/v1/files")
@@ -42,7 +35,7 @@ public class FileUploadController {
     private final QuotaService quotaService;
     private final SubscriptionValidatorService subscriptionValidator;
 
-    private final UserRespository userRepository;
+    private final UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(FileUploadController.class);
 
@@ -51,7 +44,7 @@ public class FileUploadController {
     public FileUploadController(QuotaService quotaService,
                                 FileStorageService fileStorageService,
                                 SubscriptionValidatorService subscriptionValidator,
-                                UserRespository userRepository) {
+                                UserRepository userRepository) {
         this.quotaService = quotaService;
         this.fileStorageService = fileStorageService;
         this.subscriptionValidator = subscriptionValidator;
