@@ -1,7 +1,6 @@
 package com.poeticjustice.deeppoemsinc.infrastructure.config;
 
 import com.poeticjustice.deeppoemsinc.domain.Repository.mongodb.AcceptedIpsRepository;
-import com.poeticjustice.deeppoemsinc.domain.Repository.mysql.UserRespository;
 import com.poeticjustice.deeppoemsinc.application.events.NewIPDetectedEvent;
 
 import jakarta.servlet.FilterChain;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.poeticjustice.deeppoemsinc.domain.models.mongo.AcceptedIps;
-import com.poeticjustice.deeppoemsinc.domain.models.mysql.User;
 import com.poeticjustice.deeppoemsinc.infrastructure.utils.JwtTokenUtil;
 
 import java.io.IOException;
@@ -27,10 +25,6 @@ public class IpCheckFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-    private User loggedInUser;
-
-    @Autowired
-    private UserRespository userRepository;
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(IpCheckFilter.class);
 
     @Autowired

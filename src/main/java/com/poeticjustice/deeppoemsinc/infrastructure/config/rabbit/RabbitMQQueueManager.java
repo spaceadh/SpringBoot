@@ -7,10 +7,8 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import jakarta.*;
 import jakarta.annotation.PostConstruct;
 
-import java.*;
 import java.util.*;
 
 @Component

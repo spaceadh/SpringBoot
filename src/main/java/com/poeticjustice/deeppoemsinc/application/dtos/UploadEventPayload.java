@@ -1,4 +1,4 @@
-package com.poeticjustice.deeppoemsinc.application.events.dto;
+package com.poeticjustice.deeppoemsinc.application.dtos;
 
 import java.io.Serializable;
 import lombok.*;

@@ -148,10 +148,9 @@ public class FileStorageService {
 
     // Regenerate new presigned URL for private object
     public String regeneratePresignedUrl(String userId, String fileName, int ttlHours) throws Exception {
-        // Find meta entry matching userId and fileName (fileName is original file name, not objectKey)
         List<FileMeta> metas = fileMetaRepository.findByUserId(userId);
         Optional<FileMeta> match = metas.stream()
-                .filter(m -> m.getFileName().equals(fileName) && m.getBucketName().equals(privateBucket))
+                .filter(m -> fileName.equals(m.getFileName()) && privateBucket.equals(m.getBucketName()))
                 .findFirst();
         if (match.isEmpty()) {
             throw new IllegalArgumentException("File not found for user");
