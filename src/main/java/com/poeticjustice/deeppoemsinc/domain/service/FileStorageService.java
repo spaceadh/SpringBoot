@@ -2,7 +2,7 @@ package com.poeticjustice.deeppoemsinc.domain.service;
 
 import com.poeticjustice.deeppoemsinc.domain.models.mongo.*;
 import com.poeticjustice.deeppoemsinc.domain.Repository.mongodb.*;
-import com.poeticjustice.deeppoemsinc.application.events.UploadEventPayload;
+import com.poeticjustice.deeppoemsinc.application.dtos.UploadEventPayload;
 import com.poeticjustice.deeppoemsinc.application.events.publisher.*;
 
 import io.minio.MinioClient;
@@ -12,6 +12,9 @@ import io.minio.http.Method;
 import io.minio.BucketExistsArgs;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MakeBucketArgs;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -30,6 +33,7 @@ public class FileStorageService {
     private final FileMetaRepository fileMetaRepository;
     private final UploadEventProducer eventPublisher;
 
+    private final Logger logger = LoggerFactory.getLogger(FileStorageService.class);
      // buckets
     private final String publicBucket;
     private final String privateBucket;
@@ -99,7 +103,7 @@ public class FileStorageService {
     }
 
     // Generic upload used by controller
-    public String storeFile(MultipartFile file, String category, String userId, boolean isPublic, int ttlHours) throws Exception {
+    public String storeFileDynamicUtil(MultipartFile file, String category, String userId, boolean isPublic, int ttlHours) throws Exception {
         String bucket = isPublic ? publicBucket : privateBucket;
         String objectKey = userId + "/" + UUID.randomUUID() + "-" + sanitize(file.getOriginalFilename());
 
@@ -148,6 +152,7 @@ public class FileStorageService {
     // Regenerate new presigned URL for private object
     public String regeneratePresignedUrl(String userId, String fileName, int ttlHours) throws Exception {
         List<FileMeta> metas = fileMetaRepository.findByUserId(userId);
+        logger.info("Found {} files for user {}", metas.size(), userId);
         Optional<FileMeta> match = metas.stream()
                 .filter(m -> fileName.equals(m.getFileName()) && privateBucket.equals(m.getBucketName()))
                 .findFirst();
@@ -159,6 +164,7 @@ public class FileStorageService {
     }
 
     public String generatePresignedUrl(String bucket, String object, int expirySeconds) throws Exception {
+        ensureBucketExists(bucket);
         return minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
                         .method(Method.GET)
@@ -202,8 +208,9 @@ public class FileStorageService {
                             .build());
                 } catch (Exception e) {
                     // log and continue
-                    System.err.println("Failed to remove object " + meta.getObjectKey() + ": " + e.getMessage());
+                    logger.error("Failed to remove object {}: {}", meta.getObjectKey(), e.getMessage());
                 }
+                logger.info("Deleted expired file: {} from bucket: {}", meta.getObjectKey(), meta.getBucketName());
                 // remove DB entry
                 fileMetaRepository.delete(meta);
             }
@@ -216,11 +223,16 @@ public class FileStorageService {
     private void ensureBucketExists(String bucket) throws Exception {
         boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
         if (!found) {
+            logger.info("Bucket {} does not exist, creating it", bucket);
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
         }
     }
 
     private String sanitize(String filename) {
         return filename.replaceAll("[^a-zA-Z0-9\\._\\-]", "_");
+    }
+
+    public String getPrivateBucket() {
+        return privateBucket;
     }
 }

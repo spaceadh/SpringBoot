@@ -24,4 +24,6 @@ public class FileMeta {
     private LocalDateTime uploadedAt;
     // @Column(name = "expiry_date")
     private LocalDateTime expiryDate;
+    private boolean isDeleted = false;
+    private boolean isProcessed = false;
 }

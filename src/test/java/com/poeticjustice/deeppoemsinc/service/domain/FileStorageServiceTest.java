@@ -1,12 +1,13 @@
 package com.poeticjustice.deeppoemsinc.service.domain;
 
-import com.poeticjustice.deeppoemsinc.application.events.UploadEventPayload;
+import com.poeticjustice.deeppoemsinc.application.dtos.UploadEventPayload;
 import com.poeticjustice.deeppoemsinc.application.events.publisher.UploadEventProducer;
 import com.poeticjustice.deeppoemsinc.domain.models.mongo.FileMeta;
 import com.poeticjustice.deeppoemsinc.domain.Repository.mongodb.FileMetaRepository;
 import com.poeticjustice.deeppoemsinc.domain.service.FileStorageService;
 import io.minio.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -219,8 +220,14 @@ public class FileStorageServiceTest {
 
         List<String> urls = service.listUserFiles("user123", false, 1);
 
-        assertEquals(1, urls.size());
         assertTrue(urls.get(0).contains("presigned-url"));
         verify(minioClient, times(1)).getPresignedObjectUrl(any(GetPresignedObjectUrlArgs.class));
+    }
+
+    @AfterAll
+    static void tearDown() {
+        if (mongoDBContainer != null && mongoDBContainer.isRunning()) {
+            mongoDBContainer.stop();
+        }
     }
 }

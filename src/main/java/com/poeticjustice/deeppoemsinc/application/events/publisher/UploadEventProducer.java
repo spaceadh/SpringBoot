@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
-import com.poeticjustice.deeppoemsinc.application.events.UploadEventPayload;
+import com.poeticjustice.deeppoemsinc.application.dtos.UploadEventPayload;
 
 @Service
 public class UploadEventProducer {

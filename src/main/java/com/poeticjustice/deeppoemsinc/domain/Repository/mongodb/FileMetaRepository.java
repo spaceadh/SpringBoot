@@ -14,5 +14,8 @@ public interface FileMetaRepository extends JpaRepository<FileMeta, Long> {
     List<FileMeta> findByUserId(String userId);
 
     List<FileMeta> findByExpiryDateBefore(LocalDateTime now);
-    
+
+    List<FileMeta> findByUserIdAndExpiryDateBefore(String userId, LocalDateTime now);
+
+    FileMeta findByUserIdAndFileName(String userId, String fileName);
 }

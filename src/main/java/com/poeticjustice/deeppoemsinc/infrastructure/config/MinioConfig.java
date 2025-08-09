@@ -9,10 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MinioConfig {
-    // Dotenv dotenv = Dotenv.load();
-    // String minioUrl = dotenv.get("MINIO_URL", "http://localhost:9000");
-    // String minioAccessKey = dotenv.get("MINIO_ACCESS_KEY", "minioadmin");
-    // String minioSecretKey = dotenv.get("MINIO_SECRET_KEY", "minioadmin");
     @Value("${minio.url}")
     private String minioUrl;
 
