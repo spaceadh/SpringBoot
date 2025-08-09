@@ -17,14 +17,17 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/upload")
+@RequestMapping("/api/v1/files")
 public class FileUploadController {
     private final FileStorageService fileStorageService;
     private final QuotaService quotaService;
@@ -84,6 +87,77 @@ public class FileUploadController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new UploadFileRequestDto.UploadFileResponseDto(
                             "Error uploading file: " + e.getMessage(), null, HttpStatus.INTERNAL_SERVER_ERROR));
+        }
+    }
+
+    /**
+     * Bulk upload endpoint. Multi-category supported — categories list must align with files index-wise.
+     * Accepts multipart: files[] parts and 'categories' JSON part or repeated param.
+     */
+    @PostMapping(value = "/upload/bulk", consumes = "multipart/form-data")
+    public ResponseEntity<?> uploadBulk(
+            @RequestPart("files") List<MultipartFile> files,
+            @RequestPart("categories") List<String> categories,
+            @RequestPart("userId") String userId,
+            @RequestPart(value = "client", required = false) String client,
+            @RequestPart(value = "isPublic", required = false) Boolean isPublic
+    ) {
+        try {
+            if (!subscriptionValidator.isSubscribed(userId)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("message", "User not subscribed"));
+            }
+
+            if (files.size() != categories.size()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "files and categories length mismatch"));
+            }
+
+            // Set default value for isPublic if null
+            boolean isPublicValue = (isPublic != null) ? isPublic : false;
+
+            List<Map<String, Object>> results = new ArrayList<>();
+            for (int i = 0; i < files.size(); i++) {
+                MultipartFile file = files.get(i);
+                String category = categories.get(i);
+
+                if (!quotaService.hasEnoughQuota(userId, file.getSize(), client)) {
+                    results.add(Map.of("fileName", file.getOriginalFilename(), "error", "quota exceeded"));
+                    continue;
+                }
+
+                String url = fileStorageService.storeFile(file, category, userId, isPublicValue, 1);
+                quotaService.updateQuota(userId, file.getSize(), client);
+                results.add(Map.of("fileName", file.getOriginalFilename(), "url", url));
+            }
+
+            return ResponseEntity.ok(Map.of("message", "Bulk upload finished", "results", results));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    /**
+     * Regenerate presigned URL for a private file (1 hour TTL).
+     */
+    @GetMapping("/regenerate-url/{userId}/{fileName:.+}")
+    public ResponseEntity<?> regenerateUrl(@PathVariable String userId, @PathVariable String fileName) {
+        try {
+            String url = fileStorageService.regeneratePresignedUrl(userId, fileName, 1); // 1 hour
+            return ResponseEntity.ok(Map.of("url", url));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    /**
+     * List files for a user. If isPublic = true, returns permanent public URLs; otherwise regenerates presigned urls.
+     */
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> listUserFiles(@PathVariable String userId, @RequestParam(value = "public", defaultValue = "false") boolean isPublic) {
+        try {
+            List<String> urls = fileStorageService.listUserFiles(userId, isPublic, 1);
+            return ResponseEntity.ok(Map.of("files", urls));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", e.getMessage()));
         }
     }
 

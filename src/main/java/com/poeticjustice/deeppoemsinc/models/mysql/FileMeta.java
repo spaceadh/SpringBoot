@@ -17,7 +17,11 @@ public class FileMeta {
     private long sizeInBytes;
     private String userId;
     private String storageUrl;
+    private String bucketName;
+    private String objectKey;
+    private boolean isPublic;
+    // @Column(name = "uploaded_at")
     private LocalDateTime uploadedAt;
-
-    // Getters and setters
+    // @Column(name = "expiry_date")
+    private LocalDateTime expiryDate;
 }

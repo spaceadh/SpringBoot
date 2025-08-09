@@ -1,6 +1,10 @@
 package com.poeticjustice.deeppoemsinc.service;
 
 import com.poeticjustice.deeppoemsinc.models.mysql.UserQuota;
+
+import java.util.LinkedHashMap;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -35,12 +39,18 @@ public class QuotaService {
 
     public UserQuota getQuota(String userId, String client) {
         RedisTemplate<String, Object> template = getRedisTemplate(client);
-        UserQuota quota = (UserQuota) template.opsForValue().get("quota:" + userId);
-        if (quota == null) {
+        Object stored = template.opsForValue().get("quota:" + userId);
+        UserQuota quota;
+        if (stored == null) {
             quota = new UserQuota();
             quota.setUserId(userId);
             quota.setUsedStorage(0);
             template.opsForValue().set("quota:" + userId, quota);
+        } else if (stored instanceof LinkedHashMap) {
+            ObjectMapper mapper = new ObjectMapper();
+            quota = mapper.convertValue(stored, UserQuota.class);
+        } else {
+            quota = (UserQuota) stored;
         }
         return quota;
     }

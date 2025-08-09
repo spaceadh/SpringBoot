@@ -1,30 +1,22 @@
 package com.poeticjustice.deeppoemsinc.events.consumer;
 
-
-import com.poeticjustice.deeppoemsinc.events.dto.UploadEventPayload;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Component;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-
 import com.poeticjustice.deeppoemsinc.config.RabbitMQConfig;
+// TODO: Ensure UploadEventPayload exists at the specified package.
+// If not, update the import to the correct package or create the class:
+import com.poeticjustice.deeppoemsinc.events.UploadEventPayload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.stereotype.Service;
 
-/**
- * Consumer for handling file upload events.
- * Listens to the upload queue and processes incoming messages.
- */
-
-@Component
+@Service
 public class UploadEventConsumer {
 
-    private final RabbitTemplate rabbitTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(UploadEventConsumer.class);
 
-    public UploadEventConsumer(RabbitTemplate rabbitTemplate) {
-        this.rabbitTemplate = rabbitTemplate;
-    }
-
-    @RabbitListener(queues = RabbitMQConfig.FILE_UPLOAD_QUEUE)
+    @RabbitListener(queues = RabbitMQConfig.FILE_UPLOAD_QUEUE, containerFactory = "rabbitListenerContainerFactory")
     public void handleUploadEvent(UploadEventPayload payload) {
-        // Log or process event (e.g., audit logging)
-        System.out.println("Received upload event: " + payload.getUserId() + ", " + payload.getFileName());
+        logger.info("Received upload event: {}", payload);
+        // Process event
     }
 }

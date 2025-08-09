@@ -7,22 +7,16 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "SMSResponseLogs")
+
+@Document(collection = "AcceptedIps")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SMSResponseLogs {
+public class AcceptedIps {
 
     @Id
     private String id;
-    private String reference;
-    private String message;
-    private String recipient;
-    private String gateway;
-    private boolean isSuccessful;
-    private String response;
-    private String countryCode;
-    private String messageId;
-    private String cost;
+    private String userId;
+    private String[] ipAddress;
 }

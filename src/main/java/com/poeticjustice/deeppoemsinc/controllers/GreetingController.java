@@ -8,11 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/")
 public class GreetingController {
-
     @GetMapping
-    public String sayHello() {
-        String text = "Hello world"; // Added missing semicolon
-        return text;
+    public ResponseEntity<String> sayHello() {
+        return ResponseEntity.ok("Service is running");
     }
 
     @GetMapping("/ping")

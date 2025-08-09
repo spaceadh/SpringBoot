@@ -81,7 +81,7 @@ public class JwtTokenUtil implements Serializable {
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
-            return claims.get("userId", Integer.class);
+            return claims.get("id", Integer.class) != null ? claims.get("id", Integer.class) : claims.get("userId", Integer.class);
         } catch (ExpiredJwtException | MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
             throw new InvalidJwtTokenException("Invalid JWT token");
         }
