@@ -95,7 +95,7 @@ public class FileStorageServiceTest {
         when(minioClient.bucketExists(any(BucketExistsArgs.class))).thenReturn(true);
         when(minioClient.putObject(any(PutObjectArgs.class))).thenReturn(null);
 
-        String url = service.storeFile(file, "Docs", "user123", true, 1);
+        String url = service.storeFileDynamicUtil(file, "Docs", "user123", true, 1);
 
         assertNotNull(url);
         assertTrue(url.contains(PUBLIC_BUCKET));
@@ -117,7 +117,7 @@ public class FileStorageServiceTest {
         when(minioClient.getPresignedObjectUrl(any(GetPresignedObjectUrlArgs.class)))
                 .thenReturn("https://minio.example.com/presigned-url");
 
-        String url = service.storeFile(file, "Docs", "user123", false, 1);
+        String url = service.storeFileDynamicUtil(file, "Docs", "user123", false, 1);
 
         assertNotNull(url);
         assertTrue(url.contains("presigned-url"));
