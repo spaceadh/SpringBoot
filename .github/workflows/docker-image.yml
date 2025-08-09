@@ -6,12 +6,13 @@ on:
        - main
        - DonationsApp
        - notificationService
+       - fileUploaderService
   pull_request:
     branches: 
        - main
        - DonationsApp
        - notificationService
-       - fileUploadService
+       - fileUploaderService
 
 # Ensure that the workflow has permission to write packages.
 permissions:
