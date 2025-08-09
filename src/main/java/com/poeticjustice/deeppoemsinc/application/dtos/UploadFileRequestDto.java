@@ -18,7 +18,6 @@ import jakarta.validation.constraints.*;
 @AllArgsConstructor
 @Setter
 @Getter
-@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UploadFileRequestDto {  
     

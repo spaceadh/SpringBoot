@@ -54,7 +54,7 @@ public class FileUploadController {
     @PostMapping(value = "/upload", consumes = "multipart/form-data")
     public ResponseEntity<UploadFileRequestDto.UploadFileResponseDto> uploadFile(
             @RequestPart("file") @NotNull(message = "File cannot be null") MultipartFile file,
-            @RequestPart("request") UploadFileRequestDto request) {
+            @RequestPart("request") @Valid UploadFileRequestDto request) {
         try {
             // Validate subscription
             if (!subscriptionValidator.isSubscribed(request.getUserId())) {

@@ -56,7 +56,7 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file, String category, String userId) throws Exception {
-        String bucketName = "fileuploader";
+        String bucketName = publicBucket;
 
         // ✅ Ensure bucket exists before uploading
         boolean isExist = minioClient.bucketExists(
@@ -164,6 +164,10 @@ public class FileStorageService {
     }
 
     public String generatePresignedUrl(String bucket, String object, int expirySeconds) throws Exception {
+        // Ensure bucket exists before generating URL
+        if(bucket == null || object == null || bucket.isEmpty() || object.isEmpty()) {
+            throw new IllegalArgumentException("Bucket and object must not be null");
+        }
         ensureBucketExists(bucket);
         return minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
@@ -180,7 +184,7 @@ public class FileStorageService {
         String bucket = isPublic ? publicBucket : privateBucket;
         List<FileMeta> metas = fileMetaRepository.findByUserId(userId)
                 .stream()
-                .filter(m -> m.getBucketName().equals(bucket))
+                .filter(m -> bucket.equals(m.getBucketName()) && m.getObjectKey() != null && !m.getObjectKey().isEmpty())
                 .collect(Collectors.toList());
 
         List<String> urls = new ArrayList<>();
