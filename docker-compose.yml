@@ -35,8 +35,6 @@ services:
       MYSQL_PASSWORD: HelloWorld20*
     ports:
       - "3307:3306"
-    # depends_on:
-    #   - mongodb
     volumes:
       - mariadb-data:/var/lib/mysql
 
@@ -60,6 +58,27 @@ services:
   #     - "3306:3306"
   #   volumes:
   #     - mysql-data:/var/lib/mysql
+
+  # ORACLE DB
+  oracle-db:
+    image: gvenzl/oracle-free:latest
+    container_name: oracle-db
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PASSWORD=Egf2018
+      - ORACLE_DATABASE=orcl
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./init-sql:/container-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "sqlplus", "-L", "system/Egf2018@//localhost:1521/orcl", "select 1 from dual"]
+      interval: 30s
+      timeout: 30s
+      retries: 10
+      start_period: 120s
+    restart: unless-stopped
+
   minio:
     image: minio/minio
     container_name: minio
@@ -94,6 +113,7 @@ volumes:
   # app-data:
   mariadb-data:
   # mongodb-data:
+  oracle-data:
   minio-data:
   # mysql-data:
   # redis-data:
